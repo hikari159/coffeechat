@@ -1,3 +1,24 @@
+console.log("Попытка подключения...");
+const socket = new WebSocket('wss://sockets.streamlabs.com');
+socket.onopen = function () {
+  console.log("WebSocket: Соединение установлено");
+  socket.send(JSON.stringify({
+    type: "auth",
+    socketToken: SOCKET_TOKEN
+  }));
+};
+
+socket.onmessage = function (event) {
+  console.log("WebSocket: Получено событие", event);
+};
+
+socket.onerror = function (error) {
+  console.error("WebSocket: Ошибка", error);
+};
+
+socket.onclose = function (event) {
+  console.warn("WebSocket: Соединение закрыто", event);
+};
 const socket = new WebSocket('wss://sockets.streamlabs.com');
 
 // Замени на свой Socket Token из StreamLabs
