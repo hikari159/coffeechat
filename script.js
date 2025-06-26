@@ -26,7 +26,7 @@ socket.onopen = function () {
     type: "auth",
      {
       socketToken: SOCKET_TOKEN
-    }
+    
   }));
 };
 
