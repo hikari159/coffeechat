@@ -1,28 +1,5 @@
-console.log("Попытка подключения...");
-const socket = new WebSocket('wss://sockets.streamlabs.com');
-socket.onopen = function () {
-  console.log("WebSocket: Соединение установлено");
-  socket.send(JSON.stringify({
-    type: "auth",
-    socketToken: SOCKET_TOKEN
-  }));
-};
-
-socket.onmessage = function (event) {
-  console.log("WebSocket: Получено событие", event);
-};
-
-socket.onerror = function (error) {
-  console.error("WebSocket: Ошибка", error);
-};
-
-socket.onclose = function (event) {
-  console.warn("WebSocket: Соединение закрыто", event);
-};
-
-
-// Замени на свой Socket Token из StreamLabs
-const SOCKET_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IjA2QUI5MjM4QUIwRDZENzBFRjdGIiwicmVhZF9vbmx5Ijp0cnVlLCJwcmV2ZW50X21hc3RlciI6dHJ1ZSwidHdpdGNoX2lkIjoiMTIzODE3ODQ5In0.3psdG1iTsbIHHNRTraqLb5BdzWNZvJApko-SbnQdIfw";
+// === Настройки ===
+const SOCKET_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IjA2QUI5MjM4QUIwRDZENzBFRjdGIiwicmVhZF9vbmx5Ijp0cnVlLCJwcmV2ZW50X21hc3RlciI6dHJ1ZSwidHdpdGNoX2lkIjoiMTIzODE3ODQ5In0.3psdG1iTsbIHHNRTraqLb5BdzWNZvJApko-SbnQdIfw"; // ← замени на свой токен из StreamLabs
 
 // Случайный выбор между кофе и чаем
 const cupIcons = [
@@ -41,19 +18,29 @@ const pastelGradients = [
   'linear-gradient(135deg, #e2ebf0, #ffffff)'
 ];
 
+// === Инициализация WebSocket ===
+const socket = new WebSocket('wss://sockets.streamlabs.com');
+
 socket.onopen = function () {
-  console.log("Подключено к StreamLabs");
+  console.log("✅ Соединение установлено");
   socket.send(JSON.stringify({
     type: "auth",
-      socketToken: SOCKET_TOKEN
+    socketToken: SOCKET_TOKEN
   }));
 };
 
-const chatContainer = document.getElementById('chat-container');
+socket.onerror = function (error) {
+  console.error("❌ Ошибка WebSocket:", error);
+};
+
+socket.onclose = function (event) {
+  console.warn("⚠️ Соединение закрыто:", event.reason);
+};
 
 socket.onmessage = function (event) {
   try {
     const msg = JSON.parse(event.data);
+    console.log("📨 Получено событие:", msg);
 
     if (msg.type === 'message') {
       msg.messages.forEach(chatMsg => {
@@ -80,6 +67,8 @@ socket.onmessage = function (event) {
         bubble.appendChild(avatar);
         bubble.appendChild(cup);
         bubble.appendChild(textDiv);
+
+        const chatContainer = document.getElementById('chat-container');
         chatContainer.prepend(bubble);
 
         if (chatContainer.children.length > 20) {
@@ -90,10 +79,11 @@ socket.onmessage = function (event) {
       });
     }
   } catch (e) {
-    console.error("Ошибка парсинга сообщения:", e);
+    console.error("❌ Ошибка парсинга сообщения:", e);
   }
 };
 
+// === Парсеры ===
 function parseCheermotes(message, chatMsg) {
   if (!chatMsg.cheermotes) return message;
 
