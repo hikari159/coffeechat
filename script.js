@@ -24,7 +24,6 @@ socket.onopen = function () {
   console.log("Подключено к StreamLabs");
   socket.send(JSON.stringify({
     type: "auth",
-     {
       socketToken: SOCKET_TOKEN
   }));
 };
