@@ -22,7 +22,7 @@ socket.onclose = function (event) {
 const socket = new WebSocket('wss://sockets.streamlabs.com');
 
 // Замени на свой Socket Token из StreamLabs
-const SOCKET_TOKEN = "06AB9238AB0D6D70EF7F";
+const SOCKET_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IjA2QUI5MjM4QUIwRDZENzBFRjdGIiwicmVhZF9vbmx5Ijp0cnVlLCJwcmV2ZW50X21hc3RlciI6dHJ1ZSwidHdpdGNoX2lkIjoiMTIzODE3ODQ5In0.3psdG1iTsbIHHNRTraqLb5BdzWNZvJApko-SbnQdIfw";
 
 // Случайный выбор между кофе и чаем
 const cupIcons = [
